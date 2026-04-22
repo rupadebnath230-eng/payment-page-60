@@ -117,20 +117,25 @@ function payNow(){
     return;
   }
 
-  // UPDATED UPI ID HERE ✅
-  let upi = "upi://pay?pa=triparnatalukdar6@okhdfcbank&pn=Satyabati%20Hindu%20Hotel&am=" + total;
+  // PHONEPE DIRECT INTENT (best possible)
+  let upiIntent = "intent://pay?pa=triparnatalukdar6@okhdfcbank&pn=Satyabati%20Hindu%20Hotel&am=" 
+                  + total +
+                  "#Intent;scheme=upi;package=com.phonepe.app;end";
 
+  // WhatsApp message
   let msg = "New Order%0A"
           + "Name: " + name + "%0A"
           + "Phone: " + phone + "%0A"
           + orderText
           + "Total: ₹" + total;
 
-  window.location.href = upi;
+  // OPEN PHONEPE
+  window.location.href = upiIntent;
 
+  // WhatsApp after delay
   setTimeout(function(){
     window.open("https://wa.me/919836697502?text=" + msg);
-  }, 3000);
+  }, 4000);
 }
 
 </script>

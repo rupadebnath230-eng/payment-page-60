@@ -1,18 +1,144 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pay Now</title>
+  <title>Satyabati Hindu Hotel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta http-equiv="refresh" content="0; url=upi://pay?pa=9836697502@ybl&pn=Satyabati&am=60&tn=Payment">
+  <style>
+    body { font-family: Arial; text-align: center; padding: 15px; }
+    h1 { font-size: 28px; font-weight: bold; }
 
+    .item {
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 8px;
+      font-size: 16px;
+    }
+
+    .pay {
+      background: green;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
-<body style="text-align:center;margin-top:80px;font-family:Arial;">
 
-<h3>Opening payment...</h3>
+<body>
 
-<a href="upi://pay?pa=9836697502@ybl&pn=Satyabati&am=60&tn=Payment">
-👉 Tap here if not opened
-</a>
+<h1>🍽️ Satyabati Hindu Hotel</h1>
+
+<input type="text" id="name" placeholder="Enter your name">
+<input type="number" id="phone" placeholder="Enter phone number">
+
+<!-- PRODUCT LIST -->
+
+<div class="item">
+  <h3>Rice & Fish Curry (₹60)</h3>
+  <button onclick="changeQty(0,-1)">-</button>
+  <span id="q0">0</span>
+  <button onclick="changeQty(0,1)">+</button>
+</div>
+
+<div class="item">
+  <h3>Rice & Egg Curry (₹40)</h3>
+  <button onclick="changeQty(1,-1)">-</button>
+  <span id="q1">0</span>
+  <button onclick="changeQty(1,1)">+</button>
+</div>
+
+<div class="item">
+  <h3>Rice & Veg Curry (₹30)</h3>
+  <button onclick="changeQty(2,-1)">-</button>
+  <span id="q2">0</span>
+  <button onclick="changeQty(2,1)">+</button>
+</div>
+
+<h2>Total: ₹<span id="total">0</span></h2>
+
+<button class="pay" onclick="payNow()">Pay & Order</button>
+
+<script>
+
+let products = [
+  {name: "Rice & Fish Curry", price: 60, qty: 0},
+  {name: "Rice & Egg Curry", price: 40, qty: 0},
+  {name: "Rice & Veg Curry", price: 30, qty: 0}
+];
+
+function changeQty(i, val){
+  products[i].qty += val;
+  if(products[i].qty < 0) products[i].qty = 0;
+  document.getElementById("q"+i).innerText = products[i].qty;
+  updateTotal();
+}
+
+function updateTotal(){
+  let total = 0;
+  products.forEach(p => total += p.price * p.qty);
+  document.getElementById("total").innerText = total;
+}
+
+function payNow(){
+
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+
+  let total = 0;
+  let orderText = "";
+
+  products.forEach((p, i) => {
+    if(p.qty > 0){
+      total += p.price * p.qty;
+      orderText += p.name + " x " + p.qty + "%0A";
+    }
+  });
+
+  if(total == 0){
+    alert("Select at least one item");
+    return;
+  }
+
+  if(name == "" || phone == ""){
+    alert("Enter name and phone");
+    return;
+  }
+
+  // UPI LINK (FAST)
+  let upi = "upi://pay?pa=9836697502@ybl&pn=Satyabati%20Hindu%20Hotel&am=" + total;
+
+  // WhatsApp Message
+  let msg = "New Order%0A"
+          + "Name: " + name + "%0A"
+          + "Phone: " + phone + "%0A"
+          + orderText
+          + "Total: ₹" + total;
+
+  // OPEN UPI
+  window.location.href = upi;
+
+  // AFTER PAYMENT → WHATSAPP
+  setTimeout(function(){
+    window.open("https://wa.me/919836697502?text=" + msg);
+  }, 3000);
+}
+
+</script>
 
 </body>
 </html>

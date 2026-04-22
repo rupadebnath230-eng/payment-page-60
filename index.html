@@ -46,8 +46,6 @@
 <input type="text" id="name" placeholder="Enter your name">
 <input type="number" id="phone" placeholder="Enter phone number">
 
-<!-- PRODUCT LIST -->
-
 <div class="item">
   <h3>Rice & Fish Curry (₹60)</h3>
   <button onclick="changeQty(0,-1)">-</button>
@@ -102,7 +100,7 @@ function payNow(){
   let total = 0;
   let orderText = "";
 
-  products.forEach((p, i) => {
+  products.forEach((p) => {
     if(p.qty > 0){
       total += p.price * p.qty;
       orderText += p.name + " x " + p.qty + "%0A";
@@ -119,20 +117,17 @@ function payNow(){
     return;
   }
 
-  // UPI LINK (FAST)
-  let upi = "upi://pay?pa=9836697502@ybl&pn=Satyabati%20Hindu%20Hotel&am=" + total;
+  // UPDATED UPI ID HERE ✅
+  let upi = "upi://pay?pa=triparnatalukdar6@okhdfcbank&pn=Satyabati%20Hindu%20Hotel&am=" + total;
 
-  // WhatsApp Message
   let msg = "New Order%0A"
           + "Name: " + name + "%0A"
           + "Phone: " + phone + "%0A"
           + orderText
           + "Total: ₹" + total;
 
-  // OPEN UPI
   window.location.href = upi;
 
-  // AFTER PAYMENT → WHATSAPP
   setTimeout(function(){
     window.open("https://wa.me/919836697502?text=" + msg);
   }, 3000);
